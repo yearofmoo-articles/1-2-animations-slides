@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Yearofmoo AngularJS Animation Slides</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="css/overrides.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+    <div class="clouds"></div>
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>AngularJS Animations</h1>
+					<h3>By Matias Niemelä</h3>
+					<p>
+            <a href="http://bitly.com/yom-slides" class="em">bitly.com/yom-slides</a>
+					</p>
+				</section>
+
+				<section>
+					<h2 class="em">@yearofmoo</h2>
+          <div id="logo"></div>
+          <p>
+            <a class="em2" target="_blank" href="http://www.yearofmoo.com">http://www.yearofmoo.com</a>
+          </p>
+					<p>
+            Six major AngularJS articles.
+					</p>
+
+					<p>
+            Great resource to learn about <span class="em3">AngularJS</span> and <span class="em3">ngAnimate</span>.
+					</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+        <section>
+          <section>
+            <h2 class="em">Animation &amp; Webapps</h2>
+            <p class="fragment fade-in">
+              Animation code tends almost always gets mixed in together with application code and website logic.
+            </p>
+            <p class="fragment fade-in">
+              Not so simple way of disabling and changing animation properties during runtime
+            </p>
+            <p class="fragment fade-in">
+              Difficult to test &amp; reuse animations
+            </p>
+          </section>
+
+          <section>
+            <h2 class="em">What about AngularJS?</h2>
+            <p class="fragment fade-in">
+              You'll fall into these same challenges when doing it yourself
+            </p>
+            <p class="fragment fade-in">
+              No way to hook into core operations inside your application.
+            </p>
+            <p class="fragment fade-in">
+              No way to isolate your code properly.
+            </p>
+            <p class="fragment fade-in">
+              No fair!
+            </p>
+            <p class="fragment fade-in em3">
+              ngAnimate solves this!
+            </p>
+          </section>
+
+          <section>
+            <h2 class="em">Non-Animated Demo</h2>
+            <div>
+              Here is an existing application that uses AngularJS, but without ngAnimate.
+              <a href="http://bitly.com/yom-w1" target="_blank" class="em">http://bitly.com/yom-w1</a>
+            </div>
+            <div>
+              <a href="http://bitly.com/yom-w1" target="_blank">
+                <div class="existing-example"></div>
+              </a>
+            </div>
+          </section>
+        </section>
+
+				<section>
+					<h2 class="em">ngAnimate</h2>
+
+          <p class="fragment fade-in">
+            The magical directive that signals other directives to perform animations.
+          </p>
+
+          <p class="fragment fade-in">
+            Supported in version <span class="em">1.1.5</span> of <span class="em">AngularJS</span>.
+          </p>
+
+          <p class="fragment fade-in">
+            Full support for <span class="em2">CSS3 Animations</span> &amp; <span class="em2">Transitions</span>
+          </p>
+
+          <p class="fragment fade-in">
+            Also supports <span class="em3">JavaScript animations</span>
+          </p>
+
+          <p class="fragment fade-in">
+            Lets get started!
+          </p>
+
+        </section>
+
+				<section>
+				  <section>
+            <h2 class="em">How to define animations</h2>
+
+            <p class="fragment fade-in">
+              Animations can be defined in CSS or in JavaScript (inside of your module code).
+            </p>
+
+            <p class="fragment fade-in">
+              <span class="em3">CSS-enabled</span> animations use two classes to signal the <span class="em">setup</span>
+              and the <span class="em">active</span> animation states.
+            </p>
+
+            <p class="fragment fade-in">
+              <span class="em3">JavaScript-enabled</span> animations use a <span class="em">setup</span> and a <span class="em">start</span>
+              callback.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="em">CSS3 Transitions</h2>
+            <p class="fragment fade-in">
+              Two CSS classes required.
+            </p>
+<div class="fragment fade-in">
+<pre class="big-code"><code data-trim>
+/* preparation CSS (from) */
+.some-animation {
+  transition:0.5s linear all;
+  background:red;
+}
+/* animation CSS (to) */
+.some-animation-active {
+  background:blue;
+}
+</code></pre>
+</div>
+          </section>
+
+          <section>
+            <h2 class="em">CSS3 Animations</h2>
+            <p class="fragment fade-in">
+              Only CSS class required.
+            </p>
+<div class="fragment fade-in">
+<pre class="big-code"><code data-trim>
+/* preparation CSS */
+.some-animation {
+  animation:0.5s my_animation;
+}
+/* animation CSS (from &amp; to) */
+@keyframes my_animation {
+  from { background:blue; }
+  to { background:red; }
+}
+
+</code></pre>
+</div>
+          </section>
+
+          <section>
+            <h2 class="em">JavaScript Animations</h2>
+            <p class="fragment fade-in">
+              Define it like a service
+            </p>
+<div class="fragment fade-in">
+<pre class="big-code"><code data-trim>
+ngModule.animation('some-animation', function(inject) {
+  return {
+    setup : function(element) { //preparation (from)
+      element.css('background','blue');
+    },
+    start : function(element, done) { //animation (to)
+      element.animate({
+        'background':'#F00'
+      }, done);
+    },
+    cancel : function(element, done) {
+      cancelAnimation(element);
+      done();
+    }
+  };
+});
+</code></pre>
+</div>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2 class="em">How to use animations</h2>
+<pre class="big-code fragment fade-in" style="text-align:center"><code style="padding:1em;" data-trim>
+&lt;div ng-directive ng-animate="..."&gt;&lt;div&gt;
+</code></pre>
+            <table class="yom-table fragment fade-in" id="animation-inputs">
+              <thead>
+                <tr>
+                  <th class="first">Type</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="first">String</td>
+                  <td class="em">' "some-animation' '</td>
+                </tr>
+                <tr>
+                  <td class="first">Object</td>
+                  <td class="em">' {event:"some-animation-enter"} '</td>
+                </tr>
+                <tr>
+                  <td class="first">Function</td>
+                  <td class="em">computeAnimation()</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section>
+            <h2 class="em">Shortform Syntax</h2>
+            <p class="fragment fade-in">
+              When a <span class="em">string</span> then it will expand to <span class="em">value-event</em>
+            </p>
+            <table class="yom-table fragment fade-in" id="animation-inputs">
+              <thead>
+                <th>Event</th>
+                <th class="em">ng-animate="'something'"</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>enter</td>
+                  <td>something-enter</td>
+                </tr>
+                <tr>
+                  <td>leave</td>
+                  <td>something-leave</td>
+                </tr>
+                <tr>
+                  <td>move</td>
+                  <td>something-move</td>
+                </tr>
+                <tr>
+                  <td>show</td>
+                  <td>something-show</td>
+                </tr>
+                <tr>
+                  <td>hide</td>
+                  <td>something-hide</td>
+                </tr>
+                <tr>
+                  <td>custom</td>
+                  <td>something-EVENT</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2 class="em">Animation-aware Directives</h2>
+            <p class="fragment fade-in">
+              The following directives support ngAnimate
+            </p>
+            <table class="yom-table fragment fade-in" id="animation-inputs">
+              <thead>
+                <tr>
+                  <th>Directive</th>
+                  <th>Events</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ngRepeat</td>
+                  <td>enter, move, leave</td>
+                </tr>
+                <tr>
+                  <td>ngSwitch, ngView, ngInclude</td>
+                  <td>enter, leave</td>
+                </tr>
+                <tr>
+                  <td>ngIf</td>
+                  <td>enter, leave</td>
+                </tr>
+                <tr>
+                  <td>ngShow, ngHide</td>
+                  <td>show, hide</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section>
+            <h2 class="em">ngShow / ngHide Example</h2>
+            <p class="fragment fade-in">
+              Here is an example using ngShow to fading animation
+            </p>
+<pre class="big-code fragment fade-in"><code data-trim>
+&lt;div ng-show="showMe"
+     ng-animate="{show:'show',hide:'hide'}"&gt;
+&lt;/div&gt;
+</code></pre>
+<pre class="big-code fragment fade-in"><code data-trim>
+.show, .hide {
+  transition:0.5s linear all;
+}
+.show { opacity:0; }
+.show-active { opacity:1; }
+.hide { opacity:1; }
+.hide-active { opacity:0; }
+</code></pre>
+          </section>
+
+          <section>
+            <h2 class="em">ngView Example</h2>
+            <p class="fragment fade-in">
+              Here is an example using ngView to perform a sliding animation
+            </p>
+<pre class="big-code fragment fade-in" style="text-align:center"><code data-trim>
+&lt;div ng-view ng-animate="'view'"&gt;&lt;/div&gt;
+</code></pre>
+<pre class="big-code fragment fade-in"><code data-trim>
+.view-enter, .view-leave {
+  transition:0.5s linear all;
+  position:relative;
+}
+.view-enter { opacity:0; left:20px; }
+.view-enter-active { opacity:1; left:0; }
+.view-leave { opacity:1; left:0; }
+.view-leave-active { opacity:0; left:-20px; }
+</code></pre>
+          </section>
+
+          <section>
+            <h2 class="em">ngRepeat Example</h2>
+            <p class="fragment fade-in">
+              Here is an example using ngRepeat to perform an expanding animation
+            </p>
+<pre class="big-code fragment fade-in" style="text-align:center"><code data-trim>
+&lt;div ng-repeat="item in items" ng-animate="'scale'"&gt;&lt;/div&gt;
+</code></pre>
+<pre class="big-code fragment fade-in"><code data-trim>
+ngModule.animate('scale-enter', function() {
+  return {
+    setup : function(element) {
+      var to = {
+        'line-height' : element.css('line-height'),
+        'height' : element.css('height')
+      };
+      element.css({
+        'height':0,
+        'line-height':0,
+      });
+      return to;
+    },
+    start : function(element, done, to) {
+      element.animate(to, done);
+    }
+  };
+});
+ngModule.animate('scale-leave', function() {
+  return {
+    start : function(element, done) {
+      element.animate({
+        'line-height':0,
+        'height':0
+      },done);
+    }
+  };
+});
+</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2 class="em">animate.css</h2>
+          <p>
+            Quick and dirty method of putting animations into your AngularJS code.
+          </p>
+<pre class="big-code fragment fade-in"><code data-trim>
+&lt;link rel="stylesheet" href="animate.css" /&gt;
+&lt;div ng-show="showMe" ng-animate="{
+  enter:'animated fadeIn',
+  leave:'animated fadeOut'
+}"&gt;&lt;/div&gt;
+</code></pre>
+          <p class="fragment fade-in">
+            <a class="em" href="http://bitly.com/yom-w3" target="_blank">bitly.com/yom-w3</a> |
+            <a class="em" href="http://daneden.me/animate/" target="_blank">animate.css homepage</a>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="em">Animated Demo</h2>
+          <div>
+            Here is an AngularJS application built using ngAnimate:
+            <a href="http://bitly.com/yom-w2" target="_blank" class="em">http://bitly.com/yom-w2</a>
+          </div>
+          <div>
+            <a href="http://bitly.com/yom-w2" target="_blank">
+              <div class="animated-example"></div>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <section>
+            <h2 class="em">Using $animator in your own directives</h2>
+            <p class="fragment fade-in">
+              $animator is a core service for running animations.
+            </p>
+<pre class="big-code fragment fade-in"><code data-trim>
+ngModule.directive('my-directive', function($animator) {
+  return function($scope, element, attrs) {
+    var animator = $animator($scope, attrs); 
+    //...
+  };
+});
+</code></pre>
+            <p class="fragment fade-in">
+              Now the created animator object can be used trigger animations 
+            </p>
+          </section>
+
+          <section>
+            <h2 class="em">How to run animations</h2>
+            <p class="fragment fade-in">
+              the animator object can trigger common events such as:
+            </p>
+            <table class="yom-table fragment fade-in" id="animation-members">
+              <thead>
+                <th class="first">Event</th>
+                <th class="em">ng-animate="'something'"</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="first">enter</td>
+                  <td>animator.enter(<span class="em2">element, parent, after</span>)</td>
+                </tr>
+                <tr>
+                  <td class="first">leave</td>
+                  <td>animator.leave(<span class="em2">element, parent</span>)</td>
+                </tr>
+                <tr>
+                  <td class="first">move</td>
+                  <td>animator.move(<span class="em2">element, parent, after</span>)</td>
+                </tr>
+                <tr>
+                  <td class="first">show</td>
+                  <td>animator.show(<span class="em2">element</span>)</td>
+                </tr>
+                <tr>
+                  <td class="first">hide</td>
+                  <td>animator.hide(<span class="em2">element</span>)</td>
+                </tr>
+                <tr>
+                  <td class="first">custom</td>
+                  <td>animator.animate(<span class="em2">event, element</span>)</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <h2 class="em">$animator example</h2>
+            <p class="fragment fade-in">
+              This will show and hide the element when clicked
+            </p>
+<pre class="big-code fragment fade-in"><code data-trim>
+ngModule.directive('my-directive', function($animator) {
+  return function($scope, element, attrs) {
+    var animator = $animator($scope, attrs); 
+    var toggle = element.children()[0];
+    var container = element.children()[1];
+    toggle.bind('click', function() {
+      container.css('display') == 'none' ?
+        animator.show(container) :
+        animator.hide(container);
+    });
+  };
+});
+</code></pre>
+<pre class="big-code fragment fade-in"><code data-trim>
+&lt;div my-directive
+     ng-animate="{show:'show',hide:'hide'}"&gt;
+  &lt;button&gt;toggle&lt;/button&gt;
+  &lt;div&gt;...&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+          </section>
+        </section>
+        <section>
+          <h2 class="em">Disabling Animations</h2>
+          <p class="fragment fade-in">
+            Remove the scope member or return null to ngAnimate.
+          </p>
+          <p class="fragment fade-in">
+            Run <span class="em">$animator.enabled(false)</span> in your controller.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="em">Use ngAnimate &amp; $animator</h2>
+          <p class="fragment fade-in">
+            Try to always use ngAnimate with your code
+          </p>
+          <p class="fragment fade-in">
+            Automatically cancels and starts animations without collision
+          </p>
+          <p class="fragment fade-in">
+            Easy to disable and enable animations
+          </p>
+          <p class="fragment fade-in em">
+            Common, organized method of creating animation code
+          </p>
+        </section>
+
+        <section>
+          <h2 class="em">Soon to come...</h2>
+          <p class="fragment fade-in">
+            <span class="em2">animator.addClass</span>,
+            <span class="em2">animator.removeClass</span>
+            support
+          </p>
+          <p class="fragment fade-in">
+            <span class="em3">ngClass animation</span> hooks
+          </p>
+          <p class="fragment fade-in">
+            "Spaced" animation support.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="em">Thank you!</h2>
+          <p class="fragment fade-in">
+            Thank you for making this possible
+          </p>
+          <div id="slogo"></div>
+          <p class="fragment fade-in">
+            Please use and experiment with animations so that we can make this tool better
+          </p>
+          <p class="fragment fade-in">
+					  <a href="https://twitter.com/yearofmoo" class="em" target="_blank">@yearofmoo</a>
+          </p>
+          <p class="fragment fade-in">
+            Feel free to contact me via <span class="em">matias@yearofmoo.com</span>
+          </p>
+        </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+      Reveal.configure({
+        keyboard: {
+          '27': function() {
+            var on = document.body.className.indexOf('no-clouds') >= 0;
+            if(on) {
+              document.body.className = document.body.className.replace(' no-clouds','');
+            }
+            else {
+              document.body.className += ' no-clouds';
+            }
+          }
+        }
+      });
+
+		</script>
+
+	</body>
+</html>
