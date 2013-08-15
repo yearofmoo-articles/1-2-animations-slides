@@ -38,11 +38,8 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>AngularJS Animations</h1>
+					<h1>AngularJS 1.2 Animation Changes</h1>
 					<h3>By Matias Niemelä</h3>
-					<p>
-            <a href="http://bitly.com/yom-slides" class="em">bitly.com/yom-slides</a>
-					</p>
 				</section>
 
 				<section>
@@ -66,109 +63,72 @@
 
         <section>
           <section>
-            <h2 class="em">Animation &amp; Webapps</h2>
+            <h2 class="em">AngularJS 1.2</h2>
             <p class="fragment fade-in">
-              Animation code tends almost always gets mixed in together with application code and website logic.
+              All code in the <span class="em2">unstable</span> branch will make way into the <span class="em2">stable</span> branch
             </p>
             <p class="fragment fade-in">
-              Not so simple way of disabling and changing animation properties during runtime
+              AngularJS <span class="em2">1.3</span> will be the new development branch
             </p>
             <p class="fragment fade-in">
-              Difficult to test &amp; reuse animations
+              Lots of bug fixes + concrete animations API
             </p>
           </section>
 
-          <section>
-            <h2 class="em">What about AngularJS?</h2>
-            <p class="fragment fade-in">
-              You'll fall into these same challenges when doing it yourself
-            </p>
-            <p class="fragment fade-in">
-              No way to hook into core operations inside your application.
-            </p>
-            <p class="fragment fade-in">
-              No way to isolate your code properly.
-            </p>
-            <p class="fragment fade-in">
-              No fair!
-            </p>
-            <p class="fragment fade-in em3">
-              ngAnimate solves this!
-            </p>
-          </section>
-
-          <section>
-            <h2 class="em">Non-Animated Demo</h2>
-            <div>
-              Here is an existing application that uses AngularJS, but without ngAnimate.
-              <a href="http://bitly.com/yom-w1" target="_blank" class="em">http://bitly.com/yom-w1</a>
-            </div>
-            <div>
-              <a href="http://bitly.com/yom-w1" target="_blank">
-                <div class="existing-example"></div>
-              </a>
-            </div>
-          </section>
         </section>
 
 				<section>
-					<h2 class="em">ngAnimate</h2>
+					<h2 class="em">Changes to ngAnimate</h2>
 
           <p class="fragment fade-in">
-            The magical directive that signals other directives to perform animations.
+            Template code no longer uses the <span class="em2">ng-animate=""</span> attribute to set animations.
           </p>
 
           <p class="fragment fade-in">
-            Supported in version <span class="em">1.1.5</span> of <span class="em">AngularJS</span>.
+            Both CSS and JS animations pay attention to the <span class="em2">CSS classes</span> present on an element to figure out what to animate. 
           </p>
 
           <p class="fragment fade-in">
-            Full support for <span class="em2">CSS3 Animations</span> &amp; <span class="em2">Transitions</span>
-          </p>
-
-          <p class="fragment fade-in">
-            Also supports <span class="em3">JavaScript animations</span>
-          </p>
-
-          <p class="fragment fade-in">
-            Lets get started!
+            Conditional animations are established by using <span class="em2">ng-class=""</span> to toggle animation state.             
           </p>
 
         </section>
 
 				<section>
-				  <section>
-            <h2 class="em">How to define animations</h2>
+          <section>
+            <h2 class="em">How to use them in 1.2</h2>
+              <p class="fragment fade-in">
+                Include <span class="em2">angular-animate.js</span> and <span class="em2">ngAnimate</span> into your module.
+              </p>
+<div class="fragment fade-in">
+<pre class="big-code"><code class="align-center">
+var ngModule = angular.module('myApp', ['ngAnimate']);
 
+</code></pre>
+</div>
             <p class="fragment fade-in">
-              Animations can be defined in CSS or in JavaScript (inside of your module code).
+              No ng-animate attribute required
             </p>
+<div class="fragment fade-in">
+<pre class="big-code"><code class="align-center">
+&lt;div ng-include="exp" class="my-animation"&gt;...&lt;div&gt;
 
-            <p class="fragment fade-in">
-              <span class="em3">CSS-enabled</span> animations use two classes to signal the <span class="em">setup</span>
-              and the <span class="em">active</span> animation states.
-            </p>
-
-            <p class="fragment fade-in">
-              <span class="em3">JavaScript-enabled</span> animations use a <span class="em">setup</span> and a <span class="em">start</span>
-              callback.
-            </p>
+</code></pre>
+</div>
           </section>
 
           <section>
-            <h2 class="em">CSS3 Transitions</h2>
+            <h2 class="em">CSS Transition Example</h2>
             <p class="fragment fade-in">
               Two CSS classes required.
             </p>
 <div class="fragment fade-in">
 <pre class="big-code"><code data-trim>
-/* preparation CSS (from) */
-.some-animation {
+.my-animation.ng-enter {
   transition:0.5s linear all;
   background:red;
 }
-/* animation CSS (to) */
-.some-animation-active {
+.my-animation.ng-enter.ng-enter-active {
   background:blue;
 }
 </code></pre>
@@ -182,11 +142,9 @@
             </p>
 <div class="fragment fade-in">
 <pre class="big-code"><code data-trim>
-/* preparation CSS */
-.some-animation {
+.my-animation.ng-enter {
   animation:0.5s my_animation;
 }
-/* animation CSS (from &amp; to) */
 @keyframes my_animation {
   from { background:blue; }
   to { background:red; }
@@ -199,24 +157,21 @@
           <section>
             <h2 class="em">JavaScript Animations</h2>
             <p class="fragment fade-in">
-              Define it like a service
+              Use the class name as the name of the animation
             </p>
 <div class="fragment fade-in">
 <pre class="big-code"><code data-trim>
-ngModule.animation('some-animation', function(inject) {
+ngModule.animation('.my-animation', function(inject) {
   return {
-    setup : function(element) { //preparation (from)
-      element.css('background','blue');
+    enter : function(element, done) {
+      animate(element, done);
+      return function onEnd(cancelled) {
+        //stop the animation here if cancelled or
+        //when the animation is over
+      };
     },
-    start : function(element, done) { //animation (to)
-      element.animate({
-        'background':'#F00'
-      }, done);
-    },
-    cancel : function(element, done) {
-      cancelAnimation(element);
-      done();
-    }
+    addClass : function(element, className, done) { ... },
+    removeClass : function(element, className, done) { ... }
   };
 });
 </code></pre>
@@ -224,348 +179,83 @@ ngModule.animation('some-animation', function(inject) {
           </section>
         </section>
         <section>
-          <section>
-            <h2 class="em">How to use animations</h2>
-<pre class="big-code fragment fade-in" style="text-align:center"><code style="padding:1em;" data-trim>
-&lt;div ng-directive ng-animate="..."&gt;&lt;div&gt;
-</code></pre>
-            <table class="yom-table fragment fade-in" id="animation-inputs">
-              <thead>
-                <tr>
-                  <th class="first">Type</th>
-                  <th>Example</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="first">String</td>
-                  <td class="em">' "some-animation' '</td>
-                </tr>
-                <tr>
-                  <td class="first">Object</td>
-                  <td class="em">' {event:"some-animation-enter"} '</td>
-                </tr>
-                <tr>
-                  <td class="first">Function</td>
-                  <td class="em">computeAnimation()</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <section>
-            <h2 class="em">Shortform Syntax</h2>
+         <section>
+          <h2 class="em">ngClass now supports animations</h2>
             <p class="fragment fade-in">
-              When a <span class="em">string</span> then it will expand to <span class="em">value-event</em>
+              ngClass triggers the <span class="em">add</span> and  <span class="em">remove</span> actions.
             </p>
-            <table class="yom-table fragment fade-in" id="animation-inputs">
-              <thead>
-                <th>Event</th>
-                <th class="em">ng-animate="'something'"</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>enter</td>
-                  <td>something-enter</td>
-                </tr>
-                <tr>
-                  <td>leave</td>
-                  <td>something-leave</td>
-                </tr>
-                <tr>
-                  <td>move</td>
-                  <td>something-move</td>
-                </tr>
-                <tr>
-                  <td>show</td>
-                  <td>something-show</td>
-                </tr>
-                <tr>
-                  <td>hide</td>
-                  <td>something-hide</td>
-                </tr>
-                <tr>
-                  <td>custom</td>
-                  <td>something-EVENT</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+<pre class="big-code  fragment fade-in"><code class="align-center">
+&lt;div ng-class="val"&gt;...&lt;div&gt;
+
+</code></pre>
+            <p class="fragment fade-in">
+              The CSS code is similar
+            </p>
+
+<pre class="big-code fragment fade-in"><code data-trim>
+.my-class-add, .my-class-remove {
+  transition:0.5s linear all;
+}
+.my-class-add { }
+.my-class-add.my-class-add-active { }
+.my-class-remove { }
+.my-class-remove.my-class-remove-active { }
+</code></pre>
         </section>
+      </section>
 
+      <section>
         <section>
-          <section>
-            <h2 class="em">Animation-aware Directives</h2>
-            <p class="fragment fade-in">
-              The following directives support ngAnimate
-            </p>
-            <table class="yom-table fragment fade-in" id="animation-inputs">
-              <thead>
-                <tr>
-                  <th>Directive</th>
-                  <th>Events</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>ngRepeat</td>
-                  <td>enter, move, leave</td>
-                </tr>
-                <tr>
-                  <td>ngSwitch, ngView, ngInclude</td>
-                  <td>enter, leave</td>
-                </tr>
-                <tr>
-                  <td>ngIf</td>
-                  <td>enter, leave</td>
-                </tr>
-                <tr>
-                  <td>ngShow, ngHide</td>
-                  <td>show, hide</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <section>
-            <h2 class="em">ngShow / ngHide Example</h2>
-            <p class="fragment fade-in">
-              Here is an example using ngShow to fading animation
-            </p>
+          <h2 class="em">$animator is now $animate</h2>
+          <p class="fragment fade-in">
+            $animate is the core animation service for triggering animations.
+          </p>
 <pre class="big-code fragment fade-in"><code data-trim>
-&lt;div ng-show="showMe"
-     ng-animate="{show:'show',hide:'hide'}"&gt;
-&lt;/div&gt;
-</code></pre>
-<pre class="big-code fragment fade-in"><code data-trim>
-.show, .hide {
-  transition:0.5s linear all;
-}
-.show { opacity:0; }
-.show-active { opacity:1; }
-.hide { opacity:1; }
-.hide-active { opacity:0; }
-</code></pre>
-          </section>
-
-          <section>
-            <h2 class="em">ngView Example</h2>
-            <p class="fragment fade-in">
-              Here is an example using ngView to perform a sliding animation
-            </p>
-<pre class="big-code fragment fade-in" style="text-align:center"><code data-trim>
-&lt;div ng-view ng-animate="'view'"&gt;&lt;/div&gt;
-</code></pre>
-<pre class="big-code fragment fade-in"><code data-trim>
-.view-enter, .view-leave {
-  transition:0.5s linear all;
-  position:relative;
-}
-.view-enter { opacity:0; left:20px; }
-.view-enter-active { opacity:1; left:0; }
-.view-leave { opacity:1; left:0; }
-.view-leave-active { opacity:0; left:-20px; }
-</code></pre>
-          </section>
-
-          <section>
-            <h2 class="em">ngRepeat Example</h2>
-            <p class="fragment fade-in">
-              Here is an example using ngRepeat to perform an expanding animation
-            </p>
-<pre class="big-code fragment fade-in" style="text-align:center"><code data-trim>
-&lt;div ng-repeat="item in items" ng-animate="'scale'"&gt;&lt;/div&gt;
-</code></pre>
-<pre class="big-code fragment fade-in"><code data-trim>
-ngModule.animate('scale-enter', function() {
-  return {
-    setup : function(element) {
-      var to = {
-        'line-height' : element.css('line-height'),
-        'height' : element.css('height')
-      };
-      element.css({
-        'height':0,
-        'line-height':0,
-      });
-      return to;
-    },
-    start : function(element, done, to) {
-      element.animate(to, done);
-    }
-  };
-});
-ngModule.animate('scale-leave', function() {
-  return {
-    start : function(element, done) {
-      element.animate({
-        'line-height':0,
-        'height':0
-      },done);
-    }
+ngModule.directive('my-directive', function($animate) {
+  return function($scope, element, attrs) {
+    $animate.enter(element, parent, onDone);
+    $animate.leave(element, onDone);
+    $animate.move(element, parent, after, onDone);
+    $animate.addClass(element, className, onDone);
+    $animate.removeClass(element, className, onDone);
   };
 });
 </code></pre>
-          </section>
         </section>
+      </section>
 
+      <section>
         <section>
-          <h2 class="em">animate.css</h2>
+          <h2 class="em">Other changes</h2>
           <p>
-            Quick and dirty method of putting animations into your AngularJS code.
+            <span class="em2">$animate.addClass</span> and <span class="em2">$animate.removeClass</span>
           </p>
-<pre class="big-code fragment fade-in"><code data-trim>
-&lt;link rel="stylesheet" href="animate.css" /&gt;
-&lt;div ng-show="showMe" ng-animate="{
-  enter:'animated fadeIn',
-  leave:'animated fadeOut'
-}"&gt;&lt;/div&gt;
-</code></pre>
-          <p class="fragment fade-in">
-            <a class="em" href="http://bitly.com/yom-w3" target="_blank">bitly.com/yom-w3</a> |
-            <a class="em" href="http://daneden.me/animate/" target="_blank">animate.css homepage</a>
+          <p>
+            Callbacks work together with each $animate action.
+          </p>
+          <p>
+            <span class="em2">ng-hide</span> and <span class="em2">ng-show</span> add and remove the
+            <span class="em2">.ng-hide</span> class value to show and hide an element
           </p>
         </section>
+      </section>
 
+      <section>
         <section>
-          <h2 class="em">Animated Demo</h2>
-          <div>
-            Here is an AngularJS application built using ngAnimate:
-            <a href="http://bitly.com/yom-w2" target="_blank" class="em">http://bitly.com/yom-w2</a>
-          </div>
-          <div>
-            <a href="http://bitly.com/yom-w2" target="_blank">
-              <div class="animated-example"></div>
-            </a>
-          </div>
-        </section>
-
-        <section>
-          <section>
-            <h2 class="em">Using $animator in your own directives</h2>
-            <p class="fragment fade-in">
-              $animator is a core service for running animations.
-            </p>
-<pre class="big-code fragment fade-in"><code data-trim>
-ngModule.directive('my-directive', function($animator) {
-  return function($scope, element, attrs) {
-    var animator = $animator($scope, attrs); 
-    //...
-  };
-});
-</code></pre>
-            <p class="fragment fade-in">
-              Now the created animator object can be used trigger animations 
-            </p>
-          </section>
-
-          <section>
-            <h2 class="em">How to run animations</h2>
-            <p class="fragment fade-in">
-              the animator object can trigger common events such as:
-            </p>
-            <table class="yom-table fragment fade-in" id="animation-members">
-              <thead>
-                <th class="first">Event</th>
-                <th class="em">ng-animate="'something'"</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="first">enter</td>
-                  <td>animator.enter(<span class="em2">element, parent, after</span>)</td>
-                </tr>
-                <tr>
-                  <td class="first">leave</td>
-                  <td>animator.leave(<span class="em2">element, parent</span>)</td>
-                </tr>
-                <tr>
-                  <td class="first">move</td>
-                  <td>animator.move(<span class="em2">element, parent, after</span>)</td>
-                </tr>
-                <tr>
-                  <td class="first">show</td>
-                  <td>animator.show(<span class="em2">element</span>)</td>
-                </tr>
-                <tr>
-                  <td class="first">hide</td>
-                  <td>animator.hide(<span class="em2">element</span>)</td>
-                </tr>
-                <tr>
-                  <td class="first">custom</td>
-                  <td>animator.animate(<span class="em2">event, element</span>)</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-          <section>
-            <h2 class="em">$animator example</h2>
-            <p class="fragment fade-in">
-              This will show and hide the element when clicked
-            </p>
-<pre class="big-code fragment fade-in"><code data-trim>
-ngModule.directive('my-directive', function($animator) {
-  return function($scope, element, attrs) {
-    var animator = $animator($scope, attrs); 
-    var toggle = element.children()[0];
-    var container = element.children()[1];
-    toggle.bind('click', function() {
-      container.css('display') == 'none' ?
-        animator.show(container) :
-        animator.hide(container);
-    });
-  };
-});
-</code></pre>
-<pre class="big-code fragment fade-in"><code data-trim>
-&lt;div my-directive
-     ng-animate="{show:'show',hide:'hide'}"&gt;
-  &lt;button&gt;toggle&lt;/button&gt;
-  &lt;div&gt;...&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-          </section>
-        </section>
-        <section>
-          <h2 class="em">Disabling Animations</h2>
-          <p class="fragment fade-in">
-            Remove the scope member or return null to ngAnimate.
+          <h2 class="em">What else?</h2>
+          <p>
+            Animations can be changed by swapping a Stylesheets.
           </p>
-          <p class="fragment fade-in">
-            Run <span class="em">$animator.enabled(false)</span> in your controller.
+          <p>
+            Makes it easy for plug and play functionality from other libraries 
+          </p>
+          <p>
+            Allows for multiple animations to occur at the same time
           </p>
         </section>
+      </section>
 
-        <section>
-          <h2 class="em">Use ngAnimate &amp; $animator</h2>
-          <p class="fragment fade-in">
-            Try to always use ngAnimate with your code
-          </p>
-          <p class="fragment fade-in">
-            Automatically cancels and starts animations without collision
-          </p>
-          <p class="fragment fade-in">
-            Easy to disable and enable animations
-          </p>
-          <p class="fragment fade-in em">
-            Common, organized method of creating animation code
-          </p>
-        </section>
-
-        <section>
-          <h2 class="em">Soon to come...</h2>
-          <p class="fragment fade-in">
-            <span class="em2">animator.addClass</span>,
-            <span class="em2">animator.removeClass</span>
-            support
-          </p>
-          <p class="fragment fade-in">
-            <span class="em3">ngClass animation</span> hooks
-          </p>
-          <p class="fragment fade-in">
-            "Spaced" animation support.
-          </p>
-        </section>
-
+      <section>
         <section>
           <h2 class="em">Thank you!</h2>
           <p class="fragment fade-in">
@@ -631,5 +321,6 @@ ngModule.directive('my-directive', function($animator) {
 
 		</script>
 
+    <div id="footer"></div>
 	</body>
 </html>

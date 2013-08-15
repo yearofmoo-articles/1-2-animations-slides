@@ -76,7 +76,7 @@ h1,h2,h3 {
 }
 
 .em {
-	color:#cca300!important
+	color:#00C0F7!important;
 }
 
 .em3 {
@@ -88,7 +88,7 @@ h1,h2,h3 {
 }
 
 .em2 {
-  color:#00C0F7!important
+  color:#ED9D13!important
 }
 
 .em5 {
@@ -116,7 +116,7 @@ body {
   background: -webkit-linear-gradient(top,  rgba(0,0,0,0.1) 30%,rgba(0,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
   background: -o-linear-gradient(top,  rgba(0,0,0,0.1) 30%,rgba(0,0,0,1) 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top,  rgba(0,0,0,0.1) 30%,rgba(0,0,0,1) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba(0,0,0,0.1) 30%,rgba(0,0,0,1) 100%); /* W3C */
+  background: linear-gradient(to bottom,  rgba(0,0,0,0.1) 10%,rgba(0,0,0,1) 60%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
 
@@ -154,7 +154,7 @@ body {
 
 #logo, #slogo {
   border:0;
-  background:url('logo.png') no-repeat top;
+  background:url('guys.png') no-repeat top;
   height:240px;
   margin-top:-20px;
   z-index:100;
@@ -232,4 +232,8 @@ body {
 #animation-members th.first,
 #animation-members td.first {
   width:20%!important;
+}
+
+.align-center {
+  text-align:center;
 }
